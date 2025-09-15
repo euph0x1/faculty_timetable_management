@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timetable Management System</title>
+    <meta name="description" content="Educational Timetable Management System">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-content">
+                <h1 class="nav-title">Timetable Manager</h1>
+                <div class="nav-tabs">
+                    <button class="nav-tab active" data-tab="dashboard">Dashboard</button>
+                    <button class="nav-tab" data-tab="faculty">Faculty</button>
+                    <button class="nav-tab" data-tab="subjects">Subjects</button>
+                    <button class="nav-tab" data-tab="timetable">Timetable</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <div class="page-header">
+                <h2 class="page-title">Dashboard</h2>
+                <p class="page-description">Overview of your timetable management system</p>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Total Faculty</span>
+                        <span class="stat-icon">👥</span>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="total-faculty">0</div>
+                        <p class="stat-description">Registered faculty members</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Total Subjects</span>
+                        <span class="stat-icon">📚</span>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="total-subjects">0</div>
+                        <p class="stat-description">Available subjects</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Filled Slots</span>
+                        <span class="stat-icon">📅</span>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="filled-slots">0/30</div>
+                        <p class="stat-description">Timetable completion</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Subject Hours</span>
+                        <span class="stat-icon">⏰</span>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-value" id="subject-hours">0/0</div>
+                        <p class="stat-description">Assigned vs Required</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="faculty-workload-card" class="card" style="display: none;">
+                <div class="card-header">
+                    <h3 class="card-title">Faculty Workload</h3>
+                </div>
+                <div class="card-content">
+                    <div id="faculty-workload-list"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Faculty Tab -->
+        <div id="faculty" class="tab-content">
+            <div class="page-header-with-icon">
+                <span class="page-icon">👥</span>
+                <h2 class="page-title">Faculty Management</h2>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title-with-icon">
+                        <span class="card-icon">➕</span>
+                        <h3 class="card-title">Add New Faculty</h3>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <form id="faculty-form" class="form-grid">
+                        <div class="form-group">
+                            <label for="faculty-id">Faculty ID</label>
+                            <input type="text" id="faculty-id" placeholder="e.g., FAC001" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="faculty-name">Name</label>
+                            <input type="text" id="faculty-name" placeholder="e.g., Dr. John Doe" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="faculty-department">Department</label>
+                            <input type="text" id="faculty-department" placeholder="e.g., Computer Science" required>
+                        </div>
+                    </form>
+                    <button type="submit" form="faculty-form" class="btn btn-primary">
+                        <span class="btn-icon">➕</span>
+                        Add Faculty
+                    </button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Faculty List</h3>
+                </div>
+                <div class="card-content">
+                    <div id="faculty-list-container">
+                        <div class="empty-state">
+                            No faculty members added yet. Add your first faculty member above.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subjects Tab -->
+        <div id="subjects" class="tab-content">
+            <div class="page-header-with-icon">
+                <span class="page-icon">📚</span>
+                <h2 class="page-title">Subject Management</h2>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title-with-icon">
+                        <span class="card-icon">➕</span>
+                        <h3 class="card-title">Add New Subject</h3>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <form id="subject-form" class="form-grid">
+                        <div class="form-group">
+                            <label for="subject-code">Subject Code</label>
+                            <input type="text" id="subject-code" placeholder="e.g., CS101" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject-name">Subject Name</label>
+                            <input type="text" id="subject-name" placeholder="e.g., Data Structures" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject-hours">Hours per Week</label>
+                            <input type="number" id="subject-hours" min="1" placeholder="e.g., 3" required>
+                        </div>
+                    </form>
+                    <button type="submit" form="subject-form" class="btn btn-primary">
+                        <span class="btn-icon">➕</span>
+                        Add Subject
+                    </button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Subject List</h3>
+                </div>
+                <div class="card-content">
+                    <div id="subject-list-container">
+                        <div class="empty-state">
+                            No subjects added yet. Add your first subject above.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Timetable Tab -->
+        <div id="timetable" class="tab-content">
+            <div class="page-header-with-icon">
+                <span class="page-icon">📅</span>
+                <h2 class="page-title">Timetable Management</h2>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title-with-icon">
+                        <span class="card-icon">➕</span>
+                        <h3 class="card-title">Assign Class</h3>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <form id="timetable-form" class="form-grid timetable-form">
+                        <div class="form-group">
+                            <label for="assign-day">Day</label>
+                            <select id="assign-day" required>
+                                <option value="">Select day</option>
+                                <option value="Monday">Monday</option>
+                                <option value="Tuesday">Tuesday</option>
+                                <option value="Wednesday">Wednesday</option>
+                                <option value="Thursday">Thursday</option>
+                                <option value="Friday">Friday</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="assign-time">Time Slot</label>
+                            <select id="assign-time" required>
+                                <option value="">Select time</option>
+                                <option value="9-10">9-10</option>
+                                <option value="10-11">10-11</option>
+                                <option value="11-12">11-12</option>
+                                <option value="12-1">12-1</option>
+                                <option value="2-3">2-3</option>
+                                <option value="3-4">3-4</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="assign-faculty">Faculty</label>
+                            <select id="assign-faculty" required>
+                                <option value="">Select faculty</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="assign-subject">Subject</label>
+                            <select id="assign-subject" required>
+                                <option value="">Select subject</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="assign-room">Room</label>
+                            <input type="text" id="assign-room" placeholder="e.g., A101" required>
+                        </div>
+                    </form>
+                    <button type="submit" form="timetable-form" class="btn btn-primary">
+                        <span class="btn-icon">➕</span>
+                        Assign Class
+                    </button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Weekly Timetable</h3>
+                </div>
+                <div class="card-content">
+                    <div class="timetable-container">
+                        <table id="timetable-grid" class="timetable">
+                            <thead>
+                                <tr>
+                                    <th class="timetable-header">Day / Time</th>
+                                    <th class="timetable-header">9-10</th>
+                                    <th class="timetable-header">10-11</th>
+                                    <th class="timetable-header">11-12</th>
+                                    <th class="timetable-header">12-1</th>
+                                    <th class="timetable-header">2-3</th>
+                                    <th class="timetable-header">3-4</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="timetable-day">Monday</td>
+                                    <td class="timetable-cell" data-day="Monday" data-time="9-10"></td>
+                                    <td class="timetable-cell" data-day="Monday" data-time="10-11"></td>
+                                    <td class="timetable-cell" data-day="Monday" data-time="11-12"></td>
+                                    <td class="timetable-cell" data-day="Monday" data-time="12-1"></td>
+                                    <td class="timetable-cell" data-day="Monday" data-time="2-3"></td>
+                                    <td class="timetable-cell" data-day="Monday" data-time="3-4"></td>
+                                </tr>
+                                <tr>
+                                    <td class="timetable-day">Tuesday</td>
+                                    <td class="timetable-cell" data-day="Tuesday" data-time="9-10"></td>
+                                    <td class="timetable-cell" data-day="Tuesday" data-time="10-11"></td>
+                                    <td class="timetable-cell" data-day="Tuesday" data-time="11-12"></td>
+                                    <td class="timetable-cell" data-day="Tuesday" data-time="12-1"></td>
+                                    <td class="timetable-cell" data-day="Tuesday" data-time="2-3"></td>
+                                    <td class="timetable-cell" data-day="Tuesday" data-time="3-4"></td>
+                                </tr>
+                                <tr>
+                                    <td class="timetable-day">Wednesday</td>
+                                    <td class="timetable-cell" data-day="Wednesday" data-time="9-10"></td>
+                                    <td class="timetable-cell" data-day="Wednesday" data-time="10-11"></td>
+                                    <td class="timetable-cell" data-day="Wednesday" data-time="11-12"></td>
+                                    <td class="timetable-cell" data-day="Wednesday" data-time="12-1"></td>
+                                    <td class="timetable-cell" data-day="Wednesday" data-time="2-3"></td>
+                                    <td class="timetable-cell" data-day="Wednesday" data-time="3-4"></td>
+                                </tr>
+                                <tr>
+                                    <td class="timetable-day">Thursday</td>
+                                    <td class="timetable-cell" data-day="Thursday" data-time="9-10"></td>
+                                    <td class="timetable-cell" data-day="Thursday" data-time="10-11"></td>
+                                    <td class="timetable-cell" data-day="Thursday" data-time="11-12"></td>
+                                    <td class="timetable-cell" data-day="Thursday" data-time="12-1"></td>
+                                    <td class="timetable-cell" data-day="Thursday" data-time="2-3"></td>
+                                    <td class="timetable-cell" data-day="Thursday" data-time="3-4"></td>
+                                </tr>
+                                <tr>
+                                    <td class="timetable-day">Friday</td>
+                                    <td class="timetable-cell" data-day="Friday" data-time="9-10"></td>
+                                    <td class="timetable-cell" data-day="Friday" data-time="10-11"></td>
+                                    <td class="timetable-cell" data-day="Friday" data-time="11-12"></td>
+                                    <td class="timetable-cell" data-day="Friday" data-time="12-1"></td>
+                                    <td class="timetable-cell" data-day="Friday" data-time="2-3"></td>
+                                    <td class="timetable-cell" data-day="Friday" data-time="3-4"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
